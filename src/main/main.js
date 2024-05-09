@@ -4,23 +4,24 @@ try {
 } catch (_) {
 }
 
-const {app, BrowserWindow, ipcMain, dialog, Menu, Tray} = require('electron')
+const { app, BrowserWindow, ipcMain, dialog, Menu, Tray } = require('electron')
 const path = require('path')
 
 let mainWindow;
 let appTray = null;
 
-function createWindow() {
+function createWindow () {
   const url = path.join(__dirname, '../../dist/index.html')
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     icon: path.join(__dirname, "./public/DWS.ico"),
     webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       enableRemoteModule: true,
-      contextIsolation: false,
-      webSecurity: false,
+      //contextIsolation: false, 这个配置为 false 会导致没法加载 preloadjs里的 node api
+      // webSecurity: false,
     }
   })
   mainWindow.loadURL('http://localhost:3000/')
@@ -80,16 +81,16 @@ app.whenReady().then(() => {
       }
     }
   ];
-//系统托盘图标
+  //系统托盘图标
   let iconPath = path.join(__dirname, "../../public/icon.ico")
   appTray = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate(trayMenuTemplate);
 
-//设置此托盘图标的悬停提示内容
+  //设置此托盘图标的悬停提示内容
   appTray.setToolTip('DWS');
-//设置此图标的上下文菜单
+  //设置此图标的上下文菜单
   appTray.setContextMenu(contextMenu);
-//单击右下角小图标显示应用左键
+  //单击右下角小图标显示应用左键
   appTray.on('click', () => {
     mainWindow.show();
   })
