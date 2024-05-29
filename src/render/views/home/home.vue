@@ -1,6 +1,8 @@
 <template>
   <div class="box">
-    首页
+    首页 你好啊
+    <input type="file" @change="handleFileChange" />
+
   </div>
 </template>
 
@@ -10,14 +12,26 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const data = reactive({
-  mouseOver: 0
+  mouseOver: 0,
+  filePath: '',
+  fileContent: null
 });
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    data.filePath = window.api.getFilePath(file);
+    data.fileContent = window.api.readFile(data.filePath);
+  } else {
+    console.log('未选择文件');
+  }
+}
 
 const loadFile = () => {
 
 
 
-  window.api.readFile('/Users/xueyuan/Desktop/electext/index.txt', (err, data) => {
+  window.api.readFile('./electext/index.txt', (err, data) => {
 
     if (err) {
       console.error('Error reading file:', err);
