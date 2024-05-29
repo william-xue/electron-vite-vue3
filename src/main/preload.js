@@ -8,8 +8,11 @@ contextBridge.exposeInMainWorld('api', {
             callback(err, data);
         });
     },
-    getFilePath: (file) => {
-        return file.path;
+    getFilePath: (file, callback) => {
+        console.log('file.path: ', file.path);
+
+
+        callback(file.path);
     },
     writeFile: (filePath, content, callback) => {
         fs.writeFile(filePath, content, 'utf8', (err) => {

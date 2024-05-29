@@ -19,9 +19,14 @@ const data = reactive({
 
 const handleFileChange = (event) => {
   const file = event.target.files[0];
+  console.log('file: ', file);
+
   if (file) {
-    data.filePath = window.api.getFilePath(file);
-    data.fileContent = window.api.readFile(data.filePath);
+    data.filePath = window.api.getFilePath(file, (data) => {
+
+      console.log('File getFilePath:', data);
+    });
+    //data.fileContent = window.api.readFile(data.filePath);
   } else {
     console.log('未选择文件');
   }
